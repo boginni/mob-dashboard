@@ -1,0 +1,96 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
+import 'package:yukem_dashboard/sdk/utility/page_manager.dart';
+import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/tela_metas.dart';
+import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/testes.dart';
+import 'package:yukem_dashboard/yukem_dashboard/screens/utilidades/tela_configuracoes.dart';
+import 'package:yukem_dashboard/yukem_dashboard/screens/vendedor/tela_faturamento.dart';
+
+import 'screens/dashboard/vendas/tela_vendas.dart';
+
+class Dashboard extends StatefulWidget {
+  const Dashboard({Key? key}) : super(key: key);
+
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  late final PageManager pageManager;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    pageManager = PageManager(initialPage: 0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget p(Widget child) {
+      return WillPopScope(
+        onWillPop: () => pageManager.onWillPop(),
+        child: child,
+      );
+    }
+
+    final pages = <Widget>[
+      // TelaComissao(),
+      // TelaCritica(),
+      // TelaTestes(),
+      TelaVendas(),
+      TelaFaturamento(),
+      TelaMetas(),
+      TelaConfiguracoes(),
+    ];
+
+    final theme = AppTheme.of(context);
+
+    return Provider(
+      create: (BuildContext context) {
+        return pageManager;
+      },
+      child: MaterialApp(
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('pt', 'BR')],
+        // supportedLocales: const [Locale('pt')],
+        theme: ThemeData(
+          primaryColor: theme.colorTheme.primaryColor,
+          scaffoldBackgroundColor: theme.colorTheme.secondaryColor,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          primaryIconTheme:
+              const IconThemeData(color: Colors.black, opacity: 255),
+          appBarTheme: AppBarTheme(
+            elevation: 1,
+            backgroundColor: theme.colorTheme.primaryColor,
+            // iconTheme: const IconThemeData(color: Colors.black),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+            ),
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+            ),
+          ),
+        ),
+        home: WillPopScope(
+          onWillPop: () => pageManager.onWillPop(),
+          child: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageManager.pageController,
+            children: pages,
+          ),
+        ),
+      ),
+    );
+  }
+}
