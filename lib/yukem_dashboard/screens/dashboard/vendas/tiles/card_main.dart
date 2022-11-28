@@ -3,26 +3,29 @@ import 'package:flutter/material.dart';
 
 import '../../../../../sdk/models/configuracao/app_theme.dart';
 
-class MainCardTile extends StatelessWidget {
-  const MainCardTile({Key? key, required this.titulo, this.valor = ''})
+class DashboardCard extends StatelessWidget {
+  const DashboardCard(
+      {Key? key,
+      required this.titulo,
+      this.valor = '',
+      this.width,
+      required this.icon})
       : super(key: key);
 
   final String titulo;
   final String? valor;
+  final double? width;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
 
-    final size = AppSize.of(context);
-
-    final cardPadding = EdgeInsets.symmetric(horizontal: size.poor? 8 : 16, vertical: 22);
-
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: size.mobile ? 4 : 8),
+      padding: EdgeInsets.symmetric(horizontal: 8),
       child: Container(
-        width: size.bigScreen ? 380 : size.smallScreen ? size.poor ?300 : 380 : 300,
-        height: 120,
+        width: 250,
+        height: 100,
         decoration: BoxDecoration(
           gradient: LinearGradient(colors: [
             theme.colorTheme.primaryColor,
@@ -31,70 +34,54 @@ class MainCardTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
-                color: Colors.black,
-                spreadRadius: 0,
-                blurRadius: 1,
-                offset: Offset(1, 1.2))
+              color: Colors.black,
+              spreadRadius: 0,
+              blurRadius: 1,
+              offset: Offset(1, 1.2),
+            )
           ],
         ),
         child: Padding(
-          padding: cardPadding,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          padding: EdgeInsets.all(8),
+          child: Stack(
             children: [
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  titulo,
+                  style: theme.textTheme
+                      .title3(color: theme.colorTheme.secondaryColor),
+                ),
+              ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Icon(
-                    Icons.monetization_on_outlined,
+                    icon,
                     size: 64,
                     color: theme.colorTheme.primaryColorBackground,
                   ),
-                  // Icon(Icons.arrow_drop_down_sharp, size: 32,),
-                  // Text(
-                  //   '11.73',
-                  //   style: theme.textTheme
-                  //       .body(color: theme.colorTheme.secondaryColor),
-                  // ),
-                  // Text(
-                  //   '%',
-                  //   style: theme.textTheme
-                  //       .subTitle2(color: theme.colorTheme.secondaryColor),
-                  // ),
-                ],
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    titulo,
-                    style: theme.textTheme
-                        .title3(color: theme.colorTheme.secondaryColor),
+                  const SizedBox(
+                    width: 8,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text('R\$: $valor',
-                        style: theme.textTheme
-                            .subTitle(color: theme.colorTheme.secondaryColor)),
-                  ),
-                  Divider(
-                    color: theme.colorTheme.secondaryColor,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Text(
-                      //   titulo,
-                      //   style: theme.textTheme
-                      //       .body(color: theme.colorTheme.secondaryColor),
-                      // ),
-                      // Text('R\$: $valor',
-                      //     style: theme.textTheme.subTitle2(
-                      //         color: theme.colorTheme.secondaryColor))
-                    ],
+                  Expanded(
+                    child: Column(
+                      // mainAxisSize: MainAxisSize.max,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: valor == null
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                  '$valor',
+                                  style: theme.textTheme.subTitle(
+                                      color: theme.colorTheme.secondaryColor),
+                                ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

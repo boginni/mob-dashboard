@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/components/container_selecione_meta.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/components/themed_button.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/nocode/container_metas_gerenciar.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/nocode/container_metas_totais.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/nocode/container_metas_vendedor.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/tiles/tile_meta_cab.dart';
+import 'package:yukem_dashboard/yukem_dashboard/screens/operador/metas/tiles/tile_meta_cab.dart';
 
-import '../../../component/drawer/custom_drawer.dart';
+import '../../../component/drawer/custom_scaffold.dart';
+import 'components/container_selecione_meta.dart';
+import 'components/themed_button.dart';
+import 'moddels/meta.dart';
+import 'nocode/container_metas_gerenciar.dart';
+import 'nocode/container_metas_totais.dart';
+import 'nocode/container_metas_vendedor.dart';
 
 class TelaMetas extends StatefulWidget {
   const TelaMetas({Key? key}) : super(key: key);
@@ -89,13 +89,14 @@ class _TelaMetasState extends State<TelaMetas> {
                             ),
                             InkWell(
                               child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 8),
-                                  child: Icon(
-                                    Icons.add,
-                                    color:
-                                        theme.colorTheme.primaryColorBackground,
-                                  )),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: Icon(
+                                  Icons.add,
+                                  color:
+                                      theme.colorTheme.primaryColorBackground,
+                                ),
+                              ),
                               onTap: () {
                                 setState(() {
                                   curMeta = -1;

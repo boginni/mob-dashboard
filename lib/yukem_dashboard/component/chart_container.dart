@@ -9,17 +9,23 @@ class ChartContainer extends StatelessWidget {
     required this.child,
     this.width,
     this.height,
+    this.expanded = false,
   }) : super(key: key);
 
   final Widget? title;
   final Widget child;
-
   final double? width;
   final double? height;
+  final bool expanded;
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context);
+
+    final chart = Padding(
+      padding: EdgeInsets.all(8),
+      child: child,
+    );
 
     return Container(
       width: width,
@@ -45,14 +51,12 @@ class ChartContainer extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          if (title != null) Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: title!,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: child,
-          )
+          if (title != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: title!,
+            ),
+          expanded ? Expanded(child: chart) : chart
         ],
       ),
     );

@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DataSeries {
-
+class DataSeries<T> {
   static getGradient(MaterialColor cor) {
     final List<Color> color = <Color>[];
     color.add(cor[50]!);
@@ -14,11 +13,15 @@ class DataSeries {
     stops.add(0.5);
     stops.add(1.0);
 
-    return LinearGradient(colors: color, stops: stops, begin: Alignment.topCenter, end: Alignment.topCenter );
+    return LinearGradient(
+        colors: color,
+        stops: stops,
+        begin: Alignment.topCenter,
+        end: Alignment.topCenter);
   }
 
   final String title;
-  final List<ChartData<int>> series;
+  final List<ChartData<T>> series;
 
   final LinearGradient? gradient;
 
@@ -47,5 +50,3 @@ class ChartData<T> {
 int curColor = 0;
 
 const colors = [Colors.red, Colors.blue];
-
-

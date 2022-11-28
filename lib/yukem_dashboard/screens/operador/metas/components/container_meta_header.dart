@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta_vendedor.dart';
 
 import '../../../../../sdk/common/formatter/date_time_formatter.dart';
 import '../moddels/meta.dart';
+import '../moddels/meta_vendedor.dart';
 
 class ContainerMetaHeader extends StatelessWidget {
   const ContainerMetaHeader({Key? key, required this.meta, this.vendedor})

@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../component/drawer/custom_drawer.dart';
-
+import '../../component/drawer/custom_scaffold.dart';
 
 class TelaFaturamento extends StatefulWidget {
   const TelaFaturamento({Key? key}) : super(key: key);

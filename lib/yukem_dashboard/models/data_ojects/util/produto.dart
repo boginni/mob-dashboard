@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../../../sdk/models/configuracao/app_connection.dart';
 import '../../connection/server_routes.dart';
+import 'item.dart';
 
-class Produto {
+class Produto extends Item {
   final int id;
   String nome;
   bool mobile;
 
-  Produto(this.id, this.nome, this.mobile);
+  Produto(this.id, this.nome, this.mobile) : super(id, nome);
 
   factory Produto.parse(List<dynamic> item) {
     return Produto(item[0], item[1], item[2] == 'T');

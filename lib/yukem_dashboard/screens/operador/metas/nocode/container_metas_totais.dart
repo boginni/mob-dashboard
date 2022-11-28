@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta_item_total.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta_item_vendedor.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/tiles/tile_meta_item_total.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/tiles/tile_meta_item_vendedor.dart';
 
 import '../components/container_meta_header.dart';
 import '../moddels/meta.dart';
+import '../moddels/meta_item_total.dart';
+import '../moddels/meta_item_vendedor.dart';
+import '../tiles/tile_meta_item_total.dart';
+import '../tiles/tile_meta_item_vendedor.dart';
 
 class ContainerMetaTotais extends StatefulWidget {
   const ContainerMetaTotais({Key? key, required this.meta}) : super(key: key);

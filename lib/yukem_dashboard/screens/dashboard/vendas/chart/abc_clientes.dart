@@ -33,25 +33,21 @@ class _ListABCClientesState extends State<ListABCClientes> {
     });
   }
 
+  final _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    return ChartContainer(
-      title: ChartContainerTitle('Melhores clientes'),
-      child: SizedBox(
-        width: 300,
-        height: 600,
-        child: ContainerAfterLoading(
-          onLoading: onLoading,
-          child: ListView.builder(
-            // shrinkWrap: true,
-            itemCount: series.length,
-            padding: EdgeInsets.only(right: 10),
-            itemBuilder: (context, index) {
-              final item = series[index];
-              return _Tile(item: item);
-            },
-          ),
-        ),
+    return ContainerAfterLoading(
+      onLoading: onLoading,
+      child: ListView.builder(
+        controller: _scrollController,
+        shrinkWrap: true,
+        itemCount: series.length,
+        padding: EdgeInsets.only(right: 10),
+        itemBuilder: (context, index) {
+          final item = series[index];
+          return _Tile(item: item);
+        },
       ),
     );
   }

@@ -24,7 +24,7 @@ class _ListABCProdutosState extends State<ListABCProdutos> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ABCProduto.getData(context).then((value) {
+      ABCProduto.getData(context, '2022', '10').then((value) {
         setState(() {
           onLoading = false;
           series = value;
@@ -35,23 +35,16 @@ class _ListABCProdutosState extends State<ListABCProdutos> {
 
   @override
   Widget build(BuildContext context) {
-    return ChartContainer(
-      title: ChartContainerTitle('Produtos Mais Vendidos'),
-      child: SizedBox(
-        width: 300,
-        height: 600,
-        child: ContainerAfterLoading(
-          onLoading: onLoading,
-          child: ListView.builder(
-            // shrinkWrap: true,
-            padding: EdgeInsets.only(right: 10),
-            itemCount: series.length,
-            itemBuilder: (context, index) {
-              final item = series[index];
-              return _Tile(item: item);
-            },
-          ),
-        ),
+    return ContainerAfterLoading(
+      onLoading: onLoading,
+      child: ListView.builder(
+        shrinkWrap: true,
+        padding: EdgeInsets.only(right: 10),
+        itemCount: series.length,
+        itemBuilder: (context, index) {
+          final item = series[index];
+          return _Tile(item: item);
+        },
       ),
     );
   }

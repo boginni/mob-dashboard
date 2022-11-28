@@ -2,8 +2,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
-import 'package:yukem_dashboard/yukem_dashboard/component/container_loading.dart';
 
 import '../../app_foundation.dart';
 import 'drawer_tile.dart';
@@ -74,44 +72,45 @@ class CustomDrawerState extends State<CustomDrawer> {
           //   page: i++,
           // ),
 
+          // DrawerTile(
+          //   iconData: CupertinoIcons.chart_bar_circle,
+          //   title: 'Rotas',
+          //   page: i++,
+          // ),
+
           DrawerTile(
-            iconData: Icons.account_tree_outlined,
-            title: 'Testes',
+            iconData: CupertinoIcons.chart_bar_circle,
+            title: 'Dashboard',
             page: i++,
           ),
 
-          DrawerExpansionTile(
-            iconData: CupertinoIcons.chart_bar_circle,
-            title: 'Dashboard',
-            id: 0,
-            children: [
-              DrawerTile(
-                iconData: Icons.monetization_on_outlined,
-                title: 'Vendas',
-                page: i++,
-              ),
-              DrawerTile(
-                iconData: CupertinoIcons.cube_box,
-                title: 'Fluxo Caixa',
-                page: i++,
-              ),
-              // DrawerTile(
-              //   iconData: CupertinoIcons.cube_box,
-              //   title: 'Contas',
-              //   page: 0,
-              // ),
-              // DrawerTile(
-              //   iconData: Icons.show_chart,
-              //   title: 'Vendedores',
-              //   page: 0,
-              // ),
-              // DrawerTile(
-              //   iconData: Icons.monetization_on_outlined,
-              //   title: 'Projeções',
-              //   page: 0,
-              // ),
-            ],
-          ),
+          // DrawerExpansionTile(
+          //   iconData: CupertinoIcons.chart_bar_circle,
+          //   title: 'Categorias',
+          //   id: 0,
+          //   children: [
+          //     DrawerTile(
+          //       iconData: Icons.monetization_on_outlined,
+          //       title: 'Clientes',
+          //       page: 0,
+          //     ),
+          //     DrawerTile(
+          //       iconData: CupertinoIcons.cube_box,
+          //       title: 'Rotas',
+          //       page: 0,
+          //     ),
+          //     // DrawerTile(
+          //     //   iconData: Icons.show_chart,
+          //     //   title: 'Vendedores',
+          //     //   page: 0,
+          //     // ),
+          //     // DrawerTile(
+          //     //   iconData: Icons.monetization_on_outlined,
+          //     //   title: 'Projeções',
+          //     //   page: 0,
+          //     // ),
+          //   ],
+          // ),
 
           DrawerTile(
             iconData: Icons.area_chart,
@@ -202,73 +201,3 @@ class CustomDrawerState extends State<CustomDrawer> {
     );
   }
 }
-
-class SideDrawer extends StatelessWidget {
-  const SideDrawer(
-      {Key? key,
-      required this.child,
-      this.loading = false,
-      this.showDrawer = true})
-      : super(key: key);
-
-  final bool loading;
-  final bool showDrawer;
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final body = loading ? const ContainerLoading() : child;
-
-    return showDrawer
-        ? Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const CustomDrawer(),
-              Expanded(
-                child: body,
-              ),
-            ],
-          )
-        : body;
-  }
-}
-
-class CustomScaffold extends StatelessWidget {
-  const CustomScaffold({
-    Key? key,
-    this.loading = false,
-    required this.appBar,
-    required this.body,
-    this.minWidth,
-  }) : super(key: key);
-
-  final bool loading;
-  final Widget body;
-  final AppBar appBar;
-  final double? minWidth;
-
-  @override
-  Widget build(BuildContext context) {
-    final size = AppSize.of(context);
-    // bool showDrawer = size.width > 1500;
-    bool showDrawer = false;
-
-    return Scaffold(
-      appBar: appBar,
-      drawer: showDrawer ? null : const CustomDrawer(),
-      body: (minWidth == null || size.width > minWidth!)
-          ? SideDrawer(
-              loading: loading,
-              child: Padding(
-                padding: AppTheme.of(context).telaPadding,
-                child: body,
-              ),
-              showDrawer: showDrawer,
-            )
-          : Text('Use Uma resolução Maior para acessar essa tela'),
-    );
-  }
-}
-
-bool showConsultas = false;

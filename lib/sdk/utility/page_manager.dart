@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:yukem_dashboard/sdk/models/configuracao/app_cookies.dart';
 
 class PageManager {
-  PageManager({int initialPage = 0}) {
-    pageController = PageController(initialPage: initialPage);
+  final cookie = 'last_page';
 
+  PageManager({bool restore = true, int initialPage = 0}) {
+    if (restore) {
+      final c = AppCookies.restore();
+      initialPage = int.tryParse(c.get('last_page') ?? '') ?? initialPage;
+    }
+    pageController = PageController(initialPage: initialPage);
     page = initialPage;
   }
 
@@ -31,6 +37,8 @@ class PageManager {
       pageController.jumpToPage(newPage);
       previousPages.add(page);
       page = newPage;
+
+      AppCookies().set({cookie: page});
     }
   }
 

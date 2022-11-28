@@ -5,8 +5,8 @@ import 'package:yukem_dashboard/sdk/models/configuracao/app_connection.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_user.dart';
 
-import '../sdk/screens/tela_login.dart';
 import 'dashboard_foundation.dart';
+import 'screens/login/tela_login.dart';
 
 class Application extends StatefulWidget {
   const Application({Key? key}) : super(key: key);
@@ -19,7 +19,6 @@ class Application extends StatefulWidget {
   static logout(BuildContext context) {
     final _ApplicationState? state =
         context.findAncestorStateOfType<_ApplicationState>();
-
     if (state != null) {
       state.logout();
     }
@@ -36,19 +35,44 @@ class _ApplicationState extends State<Application> {
   }
 
   late bool onLogin;
+  bool onLoading = true;
 
   void logout() {
     onLogin = true;
+    user.logout(connection);
     performHotRestart();
   }
 
   AppTheme theme = AppTheme();
+  late AppUser user;
+  late AppConnection connection = AppConnection();
+
+  void init() async {
+    try {
+      user = AppUser.restore();
+      final res = await user.validate(connection);
+      setState(() {
+        onLoading = false;
+        if (res) {
+          onLogin = false;
+        }
+      });
+    } catch (e) {
+      setState(() {
+        user = AppUser();
+        onLogin = true;
+        onLoading = false;
+      });
+    }
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    onLogin = false;
+    onLogin = true;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      init();
+    });
   }
 
   @override
@@ -62,12 +86,12 @@ class _ApplicationState extends State<Application> {
         ),
         Provider<AppUser>(
           create: (context) {
-            return AppUser();
+            return user;
           },
         ),
         Provider<AppConnection>(
           create: (context) {
-            return AppConnection();
+            return connection;
           },
         ),
       ],
@@ -83,6 +107,7 @@ class _ApplicationState extends State<Application> {
                       },
                     );
                   },
+                  onLoading: onLoading,
                 )
               : const Dashboard(),
         ),

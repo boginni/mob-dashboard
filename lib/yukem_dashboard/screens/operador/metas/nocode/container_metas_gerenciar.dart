@@ -3,12 +3,12 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:yukem_dashboard/sdk/common/components/mostrar_confirmacao.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
 import 'package:yukem_dashboard/yukem_dashboard/component/select/selecionar_meta.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/components/buttons.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/components/input_small_number.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/components/input_small_text.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta.dart';
 
 import '../../../../component/form_date_picker.dart';
+import '../components/buttons.dart';
+import '../components/input_small_number.dart';
+import '../components/input_small_text.dart';
+import '../moddels/meta.dart';
 
 class ContainerMetaGerenciar extends StatefulWidget {
   const ContainerMetaGerenciar(

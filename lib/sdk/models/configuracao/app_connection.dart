@@ -17,7 +17,7 @@ class AppConnection {
   }
 
   static Uri getDebugServer() {
-    final server = Uri.parse("http://boginni.net:11002");
+    final server = Uri.parse("http://boginni.net:11004");
     return server;
   }
 
@@ -34,7 +34,7 @@ class AppConnection {
       {dynamic body,
       Map<String, String>? headers,
       BuildContext? context}) async {
-    body ?? {};
+    body ??= {};
     headers ??= {};
 
     /// converte para json se não for
@@ -53,12 +53,7 @@ class AppConnection {
 
     try {
       final url = getLink(defaultServer, route);
-      // debugPrint('post: $url');
-      // print(headers);
-      // print(body);
-
       final res = await post(url, body: body, headers: headers);
-
       return res;
     } on TimeoutException catch (e) {
       debugPrint('Timeout');

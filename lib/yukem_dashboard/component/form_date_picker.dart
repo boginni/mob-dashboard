@@ -76,6 +76,7 @@ class _FormDatePickerState extends State<FormDatePicker> {
       textAlign: TextAlign.center,
       onTap: () {
         showDatePicker(
+          locale: Locale('pt', 'BR'),
           context: context,
           initialDate: widget.initialDate,
           firstDate: widget.firstDate,

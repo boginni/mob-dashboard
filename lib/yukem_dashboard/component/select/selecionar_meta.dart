@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
 import 'package:yukem_dashboard/yukem_dashboard/component/container_loading.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/tiles/tile_meta_cab.dart';
+
+import '../../screens/operador/metas/moddels/meta.dart';
+import '../../screens/operador/metas/tiles/tile_meta_cab.dart';
 
 class TelaSelecionarMeta extends StatefulWidget {
   const TelaSelecionarMeta({Key? key, required this.onPressed})

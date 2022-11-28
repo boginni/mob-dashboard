@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta_item_vendedor.dart';
 
 import '../../../../../sdk/models/configuracao/app_theme.dart';
+import '../moddels/meta_item_vendedor.dart';
 
 class TileMetaItemVendedor extends StatelessWidget {
   const TileMetaItemVendedor({Key? key, required this.item, this.onPressed})

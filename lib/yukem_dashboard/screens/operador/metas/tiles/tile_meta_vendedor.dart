@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta_vendedor.dart';
+
+import '../moddels/meta_vendedor.dart';
 
 class TileMetaVendedor extends StatelessWidget {
   const TileMetaVendedor(

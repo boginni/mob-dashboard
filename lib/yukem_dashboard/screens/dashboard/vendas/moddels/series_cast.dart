@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import 'chart_data.dart';
 
 class SeriesCast {
@@ -18,19 +20,20 @@ class SeriesCast {
     return castSeries;
   }
 
-  static List<DataSeries> castRawContas(List<dynamic> rawSeries) {
-    final List<DataSeries> castSeries = [];
+  static List<DataSeries<DateTime>> castRawContas(List<dynamic> rawSeries) {
+    final List<DataSeries<DateTime>> castSeries = [];
 
-    final pago = <ChartData<int>>[];
-    final atraso = <ChartData<int>>[];
-    final vencendo = <ChartData<int>>[];
+    final pago = <ChartData<DateTime>>[];
+    final atraso = <ChartData<DateTime>>[];
+    final vencendo = <ChartData<DateTime>>[];
 
     for (int i = 0; i < rawSeries.length; i++) {
       final row = rawSeries[i];
-      final mes = row[0];
-      pago.add(ChartData(mes, row[1]));
-      atraso.add(ChartData(mes, row[2]));
-      vencendo.add(ChartData(mes, row[3]));
+      final data = DateFormat('MM-dd').parse(row[0]);
+
+      pago.add(ChartData(data, row[1].toDouble()));
+      atraso.add(ChartData(data, row[2].toDouble()));
+      vencendo.add(ChartData(data, row[3].toDouble()));
     }
 
     castSeries.add(DataSeries('Pago', pago));

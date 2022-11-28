@@ -6,22 +6,25 @@ import '../../../../../sdk/models/configuracao/app_connection.dart';
 import '../../../../models/data_ojects/util/produto.dart';
 
 class ABCProduto {
-  static Future<List<ABCProduto>> getData(BuildContext context) async {
+  static Future<List<ABCProduto>> getData(
+    BuildContext context,
+    String dataAno,
+    String dataMes,
+  ) async {
     final app = AppConnection.of(context);
-    return await app.serverPost(
-      '/dash/web/main/abc/produto',
-      body: {},
-      headers: {},
-    ).then((response) {
-      final value = const JsonDecoder().convert(response.body);
-
-      final List<ABCProduto> list = [];
-      for (final item in value) {
-        list.add(ABCProduto.parse(item));
-      }
-
-      return list;
+    return await app.serverPost('/dash/web/main/abc/produto',
+        body: {'data'}).then((response) {
+      return castData(const JsonDecoder().convert(response.body));
     });
+  }
+
+  static List<ABCProduto> castData(dynamic value) {
+    final List<ABCProduto> list = [];
+    for (final item in value) {
+      list.add(ABCProduto.parse(item));
+    }
+
+    return list;
   }
 
   ABCProduto(

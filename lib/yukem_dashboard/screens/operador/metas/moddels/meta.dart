@@ -75,6 +75,7 @@ class Meta {
         .getBuffetResult(ServerRoutes.meta_header_list, body: {}, headers: {});
 
     final List<Meta> metas = [];
+
     for (final item in rows) {
       metas.add(Meta.parse(item));
     }

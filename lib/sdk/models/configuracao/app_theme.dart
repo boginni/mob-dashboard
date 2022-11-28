@@ -37,10 +37,10 @@ class TextTheme {
 
   TextTheme(this._cor);
 
-  TextStyle title({Color? color, String? font}) {
+  TextStyle title({Color? color, String? font,  double size = 20}) {
     return GoogleFonts.getFont(font ?? _defaultFont,
         textStyle: TextStyle(
-            fontSize: 20,
+            fontSize: size,
             fontWeight: FontWeight.bold,
             color: color ?? _cor.text));
   }
@@ -78,9 +78,9 @@ class TextTheme {
             color: color ?? _cor.text.withOpacity(0.5)));
   }
 
-  TextStyle body({Color? color, String? font}) {
+  TextStyle body({Color? color, String? font, double? fontSize}) {
     return GoogleFonts.getFont(font ?? _defaultFont,
-        textStyle: TextStyle(color: color ?? _cor.text));
+        textStyle: TextStyle(color: color ?? _cor.text, fontSize: fontSize));
   }
 
   TextStyle detail({Color? color, String? font}) {

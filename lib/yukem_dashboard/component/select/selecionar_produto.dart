@@ -34,7 +34,6 @@ class _TelaSelecionarProdutoState extends State<TelaSelecionarProduto> {
     });
   }
 
-  Timer? t;
 
   @override
   void initState() {
@@ -44,6 +43,9 @@ class _TelaSelecionarProdutoState extends State<TelaSelecionarProduto> {
       getProdutoList();
     });
   }
+
+
+  Timer? t;
 
   @override
   void dispose() {

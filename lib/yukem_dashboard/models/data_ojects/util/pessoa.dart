@@ -1,8 +1,10 @@
-class Pessoa {
-  final int id;
-  String nome;
+import 'item.dart';
 
-  Pessoa(this.id, this.nome);
+class Pessoa extends Item {
+  final int id;
+  final String nome;
+
+  Pessoa(this.id, this.nome) : super(id, nome);
 
 // factory Produto.parse(List<dynamic> item) {
 //   return Produto(item[0], item[1], item[2] == 'T');

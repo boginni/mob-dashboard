@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
 import 'package:yukem_dashboard/yukem_dashboard/component/select/selecionar_produto.dart';
 import 'package:yukem_dashboard/yukem_dashboard/models/data_ojects/util/produto.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/components/buttons.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/components/container_meta_header.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta_item.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta_vendedor.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/tiles/tile_meta_item.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/tiles/tile_meta_vendedor.dart';
+
+import '../components/buttons.dart';
+import '../components/container_meta_header.dart';
+import '../moddels/meta.dart';
+import '../moddels/meta_item.dart';
+import '../moddels/meta_vendedor.dart';
+import '../tiles/tile_meta_item.dart';
+import '../tiles/tile_meta_vendedor.dart';
 
 class ContainerMetaVendedor extends StatefulWidget {
   const ContainerMetaVendedor(

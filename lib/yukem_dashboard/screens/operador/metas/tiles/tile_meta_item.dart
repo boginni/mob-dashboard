@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/metas/moddels/meta_item.dart';
 
 import '../../../../../sdk/models/configuracao/app_theme.dart';
 import '../components/buttons.dart';
+import '../moddels/meta_item.dart';
 
 class TileMetaItem extends StatelessWidget {
   const TileMetaItem(

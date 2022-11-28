@@ -18,11 +18,14 @@ class ChartVendas extends StatefulWidget {
 
 class _ChartVendasState extends State<ChartVendas> {
   late TooltipBehavior _tooltipBehavior;
+  late TrackballBehavior _trackballBehavior;
 
   @override
   void initState() {
+    _tooltipBehavior =
+        TooltipBehavior(enable: false, animationDuration: 1, duration: 100);
+    _trackballBehavior = TrackballBehavior(enable: true, activationMode: ActivationMode.singleTap);
     super.initState();
-    _tooltipBehavior = TooltipBehavior(enable: true, animationDuration: 1, duration: 100);
   }
 
   @override
@@ -36,6 +39,7 @@ class _ChartVendasState extends State<ChartVendas> {
         labelRotation: 45,
       ),
       tooltipBehavior: _tooltipBehavior,
+      trackballBehavior: _trackballBehavior,
       legend: Legend(isVisible: true, position: LegendPosition.bottom),
       series: <ChartSeries>[
         for (int i = 0; i < widget.dataSeries.length; i++)

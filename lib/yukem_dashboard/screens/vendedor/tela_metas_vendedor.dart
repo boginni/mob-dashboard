@@ -4,7 +4,7 @@ import 'package:yukem_dashboard/yukem_dashboard/component/container_loading.dart
 
 import '../../../sdk/common/formatter/date_time_formatter.dart';
 import '../../component/drawer/custom_drawer.dart';
-import '../dashboard/metas/tiles/tile_meta_item.dart';
+import '../operador/metas/tiles/tile_meta_item.dart';
 
 class TelaMetasVendedor extends StatefulWidget {
   const TelaMetasVendedor({Key? key}) : super(key: key);

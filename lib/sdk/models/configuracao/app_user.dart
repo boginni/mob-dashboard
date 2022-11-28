@@ -1,12 +1,28 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:yukem_dashboard/sdk/models/configuracao/app_cookies.dart';
+
+import 'app_connection.dart';
 
 class AppUser {
-  bool isValid = false;
+  String user = '';
+  String pass = '';
+  int? userID;
+  String userUUID = '';
+  bool onValid = false;
 
-  String ambiente = '';
-  int id = 0;
-  String uuid = '';
+  save({bool passSave = false}) {
+    final map = {
+      "user": user,
+      "user_id": userID,
+      "user_uuid": userUUID,
+      "pass": passSave ? pass : ''
+    };
+
+    AppCookies().set(map);
+  }
 
   AppUser();
 
@@ -14,36 +30,70 @@ class AppUser {
     return context.read<AppUser>();
   }
 
-  factory AppUser.init(
-      {required String ambiente, required int userId, required String userUuid}) {
-    final app = AppUser();
+  factory AppUser.restore() {
+    final u = AppUser();
+    final c = AppCookies.restore();
 
-    app.isValid = true;
-    app.ambiente = ambiente;
-    app.id = userId;
-    app.uuid = userUuid;
-
-    return app;
+    u.user = c.get('user')!;
+    u.pass = c.get('pass')!;
+    u.userID = int.tryParse(c.get('user_id') ?? '')!;
+    u.userUUID = c.get('user_uuid')!;
+    return u;
   }
 
-  toBody() {
-    return {'idVendedor': '$id', 'ambiente': ambiente, 'uuid': uuid};
+  toHeaders() {
+    return {
+      'user_id': '$userID',
+      'user_uuid': userUUID,
+    };
   }
 
-  // static AppUser getAppUser() {
-  //   _appUser = AppUser.init(ambiente: 'altogiro', idUser: 1, uuid: 'x');
-  //
-  //   if (!_appUser.isValid) {
-  //     const error = 'AppUser é inválido';
-  //     throw Exception(error);
-  //   }
-  //   return _appUser;
-  // }
-  //
-  // static setAppUser(AppUser app) {
-  //   app.isValid = true;
-  //
-  //   _appUser = app;
-  // }
+  Future<bool> validate(AppConnection app) async {
+    final h = toHeaders();
+    final response = await app.serverPost('/sys/validate/', headers: h);
 
+    if (response.statusCode == 422) {
+      return false;
+    }
+
+    if (response.statusCode == 200) {
+      onValid = const JsonDecoder().convert(response.body) as bool;
+      return onValid;
+    }
+
+    throw Exception('Resposta inválida');
+  }
+
+  Future login(BuildContext context) async {
+    final app = AppConnection.of(context);
+
+    final response = await app.serverPost(
+      '/sys/login/',
+      body: {"user": user, "pass": pass},
+    );
+
+    if (response.statusCode == 200) {
+      final f = const JsonDecoder().convert(response.body);
+      userID = f['user_id'];
+      userUUID = f['user_uuid'];
+      onValid = true;
+    }
+  }
+
+  Future logout(AppConnection app) async {
+    // final app = AppConnection.of(context);
+
+    // return await app.serverPost(
+    //   '/dash/web/main/pie/rotaCidade',
+    //   body: {"idRota": idRota},
+    //   headers: {},
+    // ).then((response) {
+    //   final value = const JsonDecoder().convert(response.body);
+    // });
+
+    userUUID = '';
+    userID = null;
+    onValid = false;
+    save();
+  }
 }

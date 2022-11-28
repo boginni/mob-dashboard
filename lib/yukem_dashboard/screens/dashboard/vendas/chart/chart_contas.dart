@@ -8,17 +8,25 @@ import '../../../../component/chart_container.dart';
 import '../moddels/chart_data.dart';
 
 class ChartContas extends StatefulWidget {
-  const ChartContas(
-      {Key? key,
-      required this.dataSeries,
-      this.interval = 1,
-      required this.title})
-      : super(key: key);
+  //--
+  const ChartContas({
+    Key? key,
+    required this.seriesAno,
+    required this.seriesMes,
+    this.interval = 1,
+    required this.title,
+    this.width,
+    this.height,
+  }) : super(key: key);
 
-  final List<DataSeries> dataSeries;
+  final List<DataSeries<DateTime>> seriesAno;
+  final List<DataSeries<DateTime>> seriesMes;
   final double? interval;
 
   final String title;
+
+  final double? width;
+  final double? height;
 
   @override
   State<ChartContas> createState() => _ChartContasState();
@@ -26,6 +34,7 @@ class ChartContas extends StatefulWidget {
 
 class _ChartContasState extends State<ChartContas> {
   late TooltipBehavior _tooltipBehavior;
+  late TrackballBehavior _trackballBehavior;
 
   @override
   void initState() {
@@ -35,118 +44,113 @@ class _ChartContasState extends State<ChartContas> {
       animationDuration: 1,
       duration: 100,
     );
+    _trackballBehavior = TrackballBehavior(
+      enable: true,
+      activationMode: ActivationMode.singleTap,
+      tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
+    );
   }
 
-  bool linear = false;
-
-  int? onlyAt;
+  bool cartesiano = false;
+  bool filtroAno = false;
 
   @override
   Widget build(BuildContext context) {
     var theme = AppTheme.of(context);
+
     final title = Padding(
       padding: const EdgeInsets.only(top: 16),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Stack(
+          children: [
+            Positioned(
               child: InkWell(
                 onTap: () {
                   setState(() {
-                    linear = !linear;
-                    onlyAt = null;
+                    cartesiano = !cartesiano;
                   });
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      linear ? Icons.area_chart : Icons.pie_chart,
+                      cartesiano ? Icons.area_chart : Icons.pie_chart,
                       color: theme.colorTheme.primaryColor,
                     ),
                     const SizedBox(
                       width: 8,
                     ),
                     Text(
-                      linear ? 'Por Mês' : 'Total Anual',
+                      cartesiano ? 'Cartesiano' : 'Torta',
                       style: theme.textTheme.title3(),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-          Align(
-            child: Text(
-              widget.title,
-              style:
-                  theme.textTheme.title(color: theme.colorTheme.primaryColor),
-            ),
-            alignment: Alignment(0, 0),
-          ),
-          if(!linear)
-          Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
+            Positioned(
+              right: 0,
               child: InkWell(
                 onTap: () {
                   setState(() {
-                    if (onlyAt == null) {
-                      linear = false;
-                      onlyAt = 8;
-                    } else {
-                      linear = false;
-                      onlyAt = null;
-                    }
+                    filtroAno = !filtroAno;
                   });
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      linear ? Icons.area_chart : Icons.pie_chart,
+                      filtroAno
+                          ? Icons.calendar_view_month
+                          : Icons.calendar_month,
                       color: theme.colorTheme.primaryColor,
                     ),
                     const SizedBox(
                       width: 8,
                     ),
                     Text(
-                      onlyAt == null ? 'Total do Ano' : 'Mês Atual',
+                      filtroAno ? 'Total do Ano' : 'Mês Atual',
                       style: theme.textTheme.title3(),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-        ],
+            Align(
+              child: Text(
+                widget.title,
+                style:
+                    theme.textTheme.title(color: theme.colorTheme.primaryColor),
+              ),
+              alignment: const Alignment(0, 0),
+            ),
+          ],
+        ),
       ),
     );
 
+    final series = filtroAno ? widget.seriesAno : widget.seriesMes;
+
     return ChartContainer(
-      width: 616,
-      height: 371,
+      width: widget.width,
+      height: widget.height,
       title: title,
       child: Row(
         children: [
-          linear
-              ? CartesianChart(
-                  dataSeries: widget.dataSeries,
-                  tooltipBehavior: _tooltipBehavior,
-                )
-              : CircularChart(
-                  onlyAt: onlyAt,
-                  dataSeries: widget.dataSeries,
-                  tooltipBehavior: _tooltipBehavior,
-                ),
-          CircularChart(
-            onlyAt: onlyAt,
-            dataSeries: widget.dataSeries,
-            tooltipBehavior: _tooltipBehavior,
-          )
+          Expanded(
+            child: cartesiano
+                ? CartesianChart(
+                    dataSeries: series,
+                    tooltipBehavior: _tooltipBehavior,
+                    trackballBehavior: _trackballBehavior,
+                    formatador: filtroAno ? 'MMMM' : 'dd/MM',
+                  )
+                : _CircularChart(
+                    dataSeries: series,
+                    tooltipBehavior: _tooltipBehavior,
+                  ),
+          ),
         ],
       ),
     );
@@ -154,13 +158,21 @@ class _ChartContasState extends State<ChartContas> {
 }
 
 class CartesianChart extends StatelessWidget {
-  const CartesianChart(
-      {Key? key, required this.dataSeries, this.interval, this.tooltipBehavior})
-      : super(key: key);
+  const CartesianChart({
+    Key? key,
+    required this.dataSeries,
+    this.interval,
+    this.tooltipBehavior,
+    this.trackballBehavior,
+    required this.formatador,
+  }) : super(key: key);
 
-  final List<DataSeries> dataSeries;
+  final List<DataSeries<DateTime>> dataSeries;
   final double? interval;
   final TooltipBehavior? tooltipBehavior;
+  final TrackballBehavior? trackballBehavior;
+
+  final String formatador;
 
   @override
   Widget build(BuildContext context) {
@@ -168,25 +180,17 @@ class CartesianChart extends StatelessWidget {
       primaryYAxis: NumericAxis(
         numberFormat: NumberFormat.simpleCurrency(locale: 'pt-br'),
       ),
-      primaryXAxis: NumericAxis(
-          // interval: interval,
-          // labelRotation: 45,
-          ),
-      tooltipBehavior: tooltipBehavior,
+      // primaryXAxis: NumericAxis(),
+      primaryXAxis: CategoryAxis(),
+      // tooltipBehavior: tooltipBehavior,
+      trackballBehavior: trackballBehavior,
       legend: Legend(isVisible: true, position: LegendPosition.bottom),
       series: <ChartSeries>[
         for (int i = 0; i < dataSeries.length; i++)
-          // StackedAreaSeries<ChartData, int>(
-          //   gradient: dataSeries[i].gradient,
-          //   dataSource: dataSeries[i].series,
-          //   xValueMapper: (ChartData data, _) => data.x,
-          //   yValueMapper: (ChartData data, _) => data.y,
-          //   legendItemText: dataSeries[i].title,
-          //   emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.zero),
-          // )
-          StackedColumnSeries<ChartData, int>(
+          StackedColumnSeries<ChartData<DateTime>, String>(
             dataSource: dataSeries[i].series,
-            xValueMapper: (ChartData data, _) => data.x,
+            xValueMapper: (ChartData<DateTime> data, _) =>
+                DateFormat(formatador).format(data.x),
             yValueMapper: (ChartData data, _) => data.y,
             legendItemText: dataSeries[i].title,
             emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.zero),
@@ -197,32 +201,27 @@ class CartesianChart extends StatelessWidget {
   }
 }
 
-class CircularChart extends StatelessWidget {
-  const CircularChart(
-      {Key? key, required this.dataSeries, this.tooltipBehavior, this.onlyAt})
-      : super(key: key);
+class _CircularChart extends StatelessWidget {
+  const _CircularChart({
+    Key? key,
+    required this.dataSeries,
+    this.tooltipBehavior,
+  }) : super(key: key);
 
   final List<DataSeries> dataSeries;
   final TooltipBehavior? tooltipBehavior;
 
-  final int? onlyAt;
-
   @override
   Widget build(BuildContext context) {
     final series = <ChartData<String>>[];
+
     dataSeries.forEach((element) {
-      late final ChartData<String> item;
-      if (onlyAt == null) {
-        item = element.sumSeries();
-      } else {
-        item = ChartData(element.title, element.series[onlyAt!].y);
-      }
-      series.add(item);
+      series.add(element.sumSeries());
     });
 
     return SfCircularChart(
       legend: Legend(isVisible: true, position: LegendPosition.bottom),
-      // tooltipBehavior: tooltipBehavior,
+      tooltipBehavior: tooltipBehavior,
       series: <CircularSeries>[
         PieSeries<ChartData<String>, String>(
           dataSource: series,
