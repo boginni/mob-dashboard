@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/caixa/tela_caixa.dart';
+import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/contas/tela_contas.dart';
+import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/main/tela_main.dart';
 import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/vendas/tela_vendas.dart';
 import 'package:yukem_dashboard/yukem_dashboard/screens/operador/metas/tela_metas.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/utilidades/tela_configuracoes.dart';
 
-import '../sdk/models/configuracao/app_cookies.dart';
 import '../sdk/models/configuracao/app_theme.dart';
 import '../sdk/utility/page_manager.dart';
+import 'screens/dashboard/rotas/tela_rotas.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -89,7 +91,11 @@ class _DashboardState extends State<Dashboard> {
                     // TelaRotas(),
                     TelaDashboardMain(),
                     TelaMetas(),
-                    TelaConfiguracoes(),
+                    TelaVendas(),
+                    TelaRotas(),
+                    TelaCaixa(),
+                    TelaContas(),
+                    // TelaConfiguracoes(),
                   ],
                 ),
               );

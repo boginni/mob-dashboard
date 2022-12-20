@@ -17,7 +17,7 @@ class AppConnection {
   }
 
   static Uri getDebugServer() {
-    final server = Uri.parse("http://boginni.net:11004");
+    final server = Uri.parse("http://pc.boginni.net:11004");
     return server;
   }
 
@@ -29,6 +29,9 @@ class AppConnection {
   factory AppConnection.of(BuildContext context) {
     return context.read<AppConnection>();
   }
+
+
+   Map<String, String> defaultHeader = {};
 
   Future<Response> serverPost(String route,
       {dynamic body,
@@ -43,13 +46,14 @@ class AppConnection {
     }
 
     headers.addAll({
-      'Content-Length': utf8.encode(body).length.toString(),
-      // 'Content-Type ': 'application/json',
+      "content-type": "application/json",
       'charset': 'utf-8',
+      'Content-Length': utf8.encode(body).length.toString(),
       // 'Connection': 'keep-alive',
       // 'Accept-Encoding': 'gzip, deflate, br',
-      "content-type": "application/json"
     });
+
+    headers.addAll(defaultHeader);
 
     try {
       final url = getLink(defaultServer, route);
@@ -65,18 +69,16 @@ class AppConnection {
     }
   }
 
-  Future<Map<String, dynamic>> getResult(String route,
+  Future<dynamic> getResult(String route,
       {dynamic body, Map<String, String>? headers}) async {
     final response = await serverPost(route, body: body, headers: headers);
-
     final resBody = const JsonDecoder().convert(response.body);
-
     return resBody;
   }
 
   Future<List<dynamic>> getBuffetResult(String route,
       {dynamic body, Map<String, String>? headers}) async {
     final resBody = await getResult(route, body: body, headers: headers);
-    return resBody['rows'];
+    return resBody['rows'] ?? [];
   }
 }

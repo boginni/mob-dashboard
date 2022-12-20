@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-import 'chart_data.dart';
+import '../../../../models/data_ojects/chart_data.dart';
 
 class SeriesCast {
   static List<DataSeries> castRawSeries(Map<String, dynamic> rawSeries,

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yukem_dashboard/yukem_dashboard/component/chart_container.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/vendas/chart/abc_clientes.dart';
-import 'package:yukem_dashboard/yukem_dashboard/screens/dashboard/vendas/chart/abc_produtos.dart';
 
 import '../../component/drawer/custom_drawer.dart';
 import '../../component/drawer/custom_scaffold.dart';
+import 'main/chart/abc_clientes.dart';
+import 'main/chart/abc_produtos.dart';
 
 class TelaTestes extends StatefulWidget {
   const TelaTestes({Key? key}) : super(key: key);

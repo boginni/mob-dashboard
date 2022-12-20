@@ -49,9 +49,7 @@ class _TelaSelecionarProdutoState extends State<TelaSelecionarProduto> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
-
     if (t != null && t!.isActive) {
       t!.cancel();
     }

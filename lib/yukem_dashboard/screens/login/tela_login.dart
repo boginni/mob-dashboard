@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:yukem_dashboard/sdk/models/configuracao/app_connection.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_user.dart';
 
@@ -24,6 +25,9 @@ class _TelaLoginState extends State<TelaLogin> {
   final TextEditingController controllerUsuario = TextEditingController();
   final TextEditingController controllerPass = TextEditingController();
 
+  final TextEditingController controllerServer = TextEditingController();
+  final TextEditingController controllerPort = TextEditingController();
+
   AppUser user = AppUser();
 
   String serverMsg = '';
@@ -37,24 +41,43 @@ class _TelaLoginState extends State<TelaLogin> {
       user = AppUser.of(context);
       controllerUsuario.text = user.user;
       controllerPass.text = user.pass;
+
+      final app = AppConnection.of(context);
+      controllerServer.text = AppConnection.defaultServer.host;
+      controllerPort.text = AppConnection.defaultServer.port.toString();
     });
   }
 
+
+  bool debugMode = true;
+
+  resetServer() {
+    AppConnection.defaultServer = AppConnection.getDebugServer();
+    controllerServer.text = AppConnection.defaultServer.host;
+    controllerPort.text = AppConnection.defaultServer.port.toString();
+  }
+
+  bool onLogining = false;
+
   save() {
+    setState(() {
+      onLogining = true;
+      serverMsg = '';
+    });
+
     user.user = controllerUsuario.text ?? '';
     user.pass = controllerPass.text ?? '';
     user.login(context).then((value) {
       user.save(passSave: user.onValid);
 
       setState(() {
+        onLogining = false;
         if (user.onValid) {
           widget.subimit();
-        } else{
-          // serverMsg = 'Usuário ou senha invalidos';
+        } else {
+          serverMsg = 'Usuário ou senha inválidos';
         }
       });
-
-
     });
   }
 
@@ -178,6 +201,69 @@ class _TelaLoginState extends State<TelaLogin> {
                                     //     autocorrect: false,
                                     //   ),
                                     // ),
+
+                                    Column(
+                                      children: [
+                                        Text('DebugMode on'),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              flex: 3,
+                                              child: TextFormField(
+                                                controller: controllerServer,
+                                                // enabled: !UserManager.loading,
+                                                decoration: const InputDecoration(
+                                                  label: Text('Server'),
+                                                  hintText: '',
+                                                ),
+                                                autocorrect: false,
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 1,
+                                              child: TextFormField(
+                                                controller: controllerPort,
+                                                // enabled: !UserManager.loading,
+                                                decoration: const InputDecoration(
+                                                  label: Text('Port'),
+                                                  hintText: '',
+                                                ),
+                                                autocorrect: false,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                final uri = Uri(
+                                                    host: controllerServer.text,
+                                                    port: int.parse(
+                                                        controllerPort.text));
+                                                AppConnection.defaultServer = uri;
+                                              },
+                                              child: Text('Salvar'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                resetServer();
+                                              },
+                                              child: Text('Resetar'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                controllerServer.text = '';
+                                                controllerPort.text = '';
+                                              },
+                                              child: Text('Limpar'),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+
                                     Focus(
                                       onFocusChange: (x) {
                                         if (!x) {
@@ -249,22 +335,28 @@ class _TelaLoginState extends State<TelaLogin> {
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
-                                      save();
+                                      if (!onLogining) {
+                                        save();
+                                      }
                                     },
                                     style: ElevatedButton.styleFrom(
                                         primary: Theme.of(context).primaryColor,
                                         minimumSize: const Size.fromHeight(50)),
-                                    child: Builder(builder: (context) {
-                                      if (isLoading) {
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                      return const Text(
-                                        "Entrar",
-                                        style: TextStyle(fontSize: 18),
-                                      );
-                                    }),
+                                    child: Builder(
+                                      builder: (context) {
+                                        if (isLoading) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                        return onLogining
+                                            ? CircularProgressIndicator()
+                                            : const Text(
+                                                "Entrar",
+                                                style: TextStyle(fontSize: 18),
+                                              );
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),

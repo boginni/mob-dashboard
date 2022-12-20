@@ -8,15 +8,17 @@ class CustomScaffold extends StatelessWidget {
   const CustomScaffold({
     Key? key,
     this.loading = false,
-    required this.appBar,
+    this.appBar,
     required this.body,
+    this.endDrawer,
     this.minWidth,
   }) : super(key: key);
 
   final bool loading;
   final Widget body;
-  final AppBar appBar;
+  final AppBar? appBar;
   final double? minWidth;
+  final Widget? endDrawer;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class CustomScaffold extends StatelessWidget {
 
     return Scaffold(
       appBar: appBar,
+      endDrawer: endDrawer,
       drawer: showDrawer ? null : const CustomDrawer(),
       body: (minWidth == null || size.width > minWidth!)
           ? SideDrawer(

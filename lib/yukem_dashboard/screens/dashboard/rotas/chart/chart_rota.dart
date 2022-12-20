@@ -7,8 +7,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../../sdk/models/configuracao/app_theme.dart';
 import '../../../../component/chart_container.dart';
 import '../../../../component/container_loading.dart';
+import '../../../../models/data_ojects/chart_data.dart';
 import '../../../../models/data_ojects/util/item.dart';
-import '../../vendas/moddels/chart_data.dart';
 import '../moddels/cidade_list_item.dart';
 import '../moddels/rota_item_list.dart';
 
@@ -47,39 +47,33 @@ class _ChartRotasState extends State<ChartRotas> {
   Widget build(BuildContext context) {
     final money = NumberFormat.simpleCurrency(locale: 'pt_br');
 
-    return ChartContainer(
-      width: 600,
-      height: 600,
-      expanded: true,
-      title: ChartContainerTitle('Rotas'),
-      child: SingleChildScrollView(
-        controller: _controller,
-        child: SizedBox(
-          height: 1800,
-          width: 600,
-          child: SfCartesianChart(
-            trackballBehavior: _trackballBehavior,
-            primaryXAxis: CategoryAxis(
-                interval: 1,
-                labelsExtent: 150,
-                labelPosition: ChartDataLabelPosition.inside,
-                opposedPosition: true),
-            primaryYAxis: NumericAxis(numberFormat: money),
-            series: <ChartSeries>[
-              // Renders bar chart
-              BarSeries<RotaItemList, String>(
-                dataSource: widget.rotaItemList,
-                xValueMapper: (data, _) => data.rota.toString(),
-                yValueMapper: (data, _) => data.valorTotal,
-                dataLabelMapper: (RotaItemList data, _) =>
-                    money.format(data.valorTotal),
-                dataLabelSettings: DataLabelSettings(
-                    isVisible: true,
-                    labelAlignment: ChartDataLabelAlignment.bottom,
-                    textStyle: AppTheme.of(context).textTheme.body(fontSize: 10)),
-              )
-            ],
-          ),
+    return SingleChildScrollView(
+      controller: _controller,
+      child: SizedBox(
+        height: 500 + (25.0 * widget.rotaItemList.length),
+        width: 600,
+        child: SfCartesianChart(
+          trackballBehavior: _trackballBehavior,
+          primaryXAxis: CategoryAxis(
+              interval: 1,
+              labelsExtent: 150,
+              labelPosition: ChartDataLabelPosition.inside,
+              opposedPosition: true),
+          primaryYAxis: NumericAxis(numberFormat: money),
+          series: <ChartSeries>[
+            // Renders bar chart
+            BarSeries<RotaItemList, String>(
+              dataSource: widget.rotaItemList,
+              xValueMapper: (data, _) => data.rota.toString(),
+              yValueMapper: (data, _) => data.valorTotal,
+              dataLabelMapper: (RotaItemList data, _) =>
+                  money.format(data.valorTotal),
+              dataLabelSettings: DataLabelSettings(
+                  isVisible: true,
+                  labelAlignment: ChartDataLabelAlignment.bottom,
+                  textStyle: AppTheme.of(context).textTheme.body(fontSize: 10)),
+            )
+          ],
         ),
       ),
     );

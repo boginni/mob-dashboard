@@ -28,6 +28,7 @@ class ChartContainer extends StatelessWidget {
     );
 
     return Container(
+      margin: EdgeInsets.all(2),
       width: width,
       height: height,
       decoration: BoxDecoration(

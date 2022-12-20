@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../moddels/chart_data.dart';
+import '../../../../models/data_ojects/chart_data.dart';
 
 class ChartVendas extends StatefulWidget {
   const ChartVendas({Key? key, required this.dataSeries, this.interval = 1})

@@ -2,6 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ionicons/ionicons.dart';
 
 import '../../app_foundation.dart';
 import 'drawer_tile.dart';
@@ -52,16 +54,21 @@ class CustomDrawerState extends State<CustomDrawer> {
                     height: 20,
                   ),
                   Text(
-                    'Controlador de Metas',
+                    'Dashboard',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     textAlign: TextAlign.left,
                   ),
-                  Text('Yukem Vendas',
+                  Text('Yukem Vendas - LIVE ERP',
                       style: TextStyle(fontSize: 14),
                       textAlign: TextAlign.left),
                   Text(Application.versao,
                       style: TextStyle(fontSize: 12),
                       textAlign: TextAlign.left),
+                  Text('ALPHA TEST',
+                      style: TextStyle(fontSize: 12),
+                      textAlign: TextAlign.left),
+                  Text('boginni.net',
+                      style: TextStyle(fontSize: 8), textAlign: TextAlign.left),
                 ],
               ),
             ),
@@ -118,17 +125,36 @@ class CustomDrawerState extends State<CustomDrawer> {
             page: i++,
           ),
 
+          DrawerTile(
+            iconData: Icons.monetization_on,
+            title: 'Vendas',
+            page: i++,
+          ),
+
+          DrawerTile(
+            iconData: Icons.local_shipping,
+            title: 'Rotas',
+            page: i++,
+          ),
+
+          DrawerTile(
+            iconData: Icons.sync,
+            title: 'Caixa',
+            page: i++,
+          ),
+          DrawerTile(
+            iconData: Icons.note,
+            title: 'Contas',
+            page: i++,
+          ),
+
           //
           // const DrawerExpansionTile(
           //   iconData: CupertinoIcons.person_alt,
           //   title: 'Vendedor',
           //   id: 1,
           //   children: [
-          //     DrawerTile(
-          //       iconData: Icons.monetization_on_outlined,
-          //       title: 'Comissão',
-          //       page: 1,
-          //     ),
+
           //     DrawerTile(
           //       iconData: CupertinoIcons.cube_box,
           //       title: 'Crítica',
@@ -183,12 +209,12 @@ class CustomDrawerState extends State<CustomDrawer> {
           //   ],
           // ),
 
-          Divider(color: Colors.grey[800]),
-          DrawerTile(
-            iconData: Icons.settings,
-            title: 'Configurações',
-            page: i++,
-          ),
+          // Divider(color: Colors.grey[800]),
+          // DrawerTile(
+          //   iconData: Icons.settings,
+          //   title: 'Configurações',
+          //   page: i++,
+          // ),
           Divider(color: Colors.grey[800]),
           DrawerTile(
             iconData: Icons.logout,

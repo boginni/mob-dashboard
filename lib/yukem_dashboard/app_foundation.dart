@@ -23,6 +23,15 @@ class Application extends StatefulWidget {
       state.logout();
     }
   }
+
+
+  static login(BuildContext context) {
+    final _ApplicationState? state =
+    context.findAncestorStateOfType<_ApplicationState>();
+    if (state != null) {
+      state.login();
+    }
+  }
 }
 
 class _ApplicationState extends State<Application> {
@@ -40,6 +49,15 @@ class _ApplicationState extends State<Application> {
   void logout() {
     onLogin = true;
     user.logout(connection);
+    connection.defaultHeader = {};
+    performHotRestart();
+  }
+
+
+  void login() {
+    onLogin = false;
+    onLoading = false;
+    connection.defaultHeader = user.toHeaders();
     performHotRestart();
   }
 
@@ -54,9 +72,11 @@ class _ApplicationState extends State<Application> {
       setState(() {
         onLoading = false;
         if (res) {
-          onLogin = false;
+          login();
         }
       });
+
+
     } catch (e) {
       setState(() {
         user = AppUser();
@@ -101,11 +121,7 @@ class _ApplicationState extends State<Application> {
           home: onLogin
               ? TelaLogin(
                   subimit: () {
-                    setState(
-                      () {
-                        onLogin = false;
-                      },
-                    );
+                    login();
                   },
                   onLoading: onLoading,
                 )

@@ -73,9 +73,9 @@ class AppUser {
     );
 
     if (response.statusCode == 200) {
-      final f = const JsonDecoder().convert(response.body);
-      userID = f['user_id'];
-      userUUID = f['user_uuid'];
+      final b = const JsonDecoder().convert(response.body);
+      userID = b['user_id'];
+      userUUID = b['user_uuid'];
       onValid = true;
     }
   }

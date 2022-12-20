@@ -4,113 +4,92 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yukem_dashboard/sdk/models/configuracao/app_theme.dart';
 
-import '../../../../component/chart_container.dart';
-import '../moddels/chart_data.dart';
+import '../chart_container.dart';
+import '../../models/data_ojects/chart_data.dart';
 
-class ChartContas extends StatefulWidget {
+class ChartItem {
+  const ChartItem({
+    required this.icon,
+    required this.nome,
+    required this.chart,
+  });
+
+  final IconData icon;
+  final String nome;
+  final Widget chart;
+}
+
+class ListCharts extends StatefulWidget {
   //--
-  const ChartContas({
+  const ListCharts({
     Key? key,
-    required this.seriesAno,
-    required this.seriesMes,
+    required this.charts,
     this.interval = 1,
     required this.title,
     this.width,
     this.height,
+    this.expanded = false,
   }) : super(key: key);
 
-  final List<DataSeries<DateTime>> seriesAno;
-  final List<DataSeries<DateTime>> seriesMes;
+  final List<ChartItem> charts;
   final double? interval;
-
   final String title;
-
   final double? width;
   final double? height;
+  final bool expanded;
 
   @override
-  State<ChartContas> createState() => _ChartContasState();
+  State<ListCharts> createState() => _ListChartsState();
 }
 
-class _ChartContasState extends State<ChartContas> {
-  late TooltipBehavior _tooltipBehavior;
-  late TrackballBehavior _trackballBehavior;
+class _ListChartsState extends State<ListCharts> {
 
   @override
   void initState() {
     super.initState();
-    _tooltipBehavior = TooltipBehavior(
-      enable: true,
-      animationDuration: 1,
-      duration: 100,
-    );
-    _trackballBehavior = TrackballBehavior(
-      enable: true,
-      activationMode: ActivationMode.singleTap,
-      tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
-    );
+
   }
 
-  bool cartesiano = false;
-  bool filtroAno = false;
+  void next() {
+    setState(() {
+      curChart++;
+      if (curChart >= widget.charts.length) {
+        curChart = 0;
+      }
+    });
+  }
+
+  int curChart = 0;
 
   @override
   Widget build(BuildContext context) {
     var theme = AppTheme.of(context);
 
+
+    if (widget.charts.length == 0)
+      return Container();
+
     final title = Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Stack(
           children: [
             Positioned(
               child: InkWell(
-                onTap: () {
-                  setState(() {
-                    cartesiano = !cartesiano;
-                  });
-                },
+                onTap: next,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      cartesiano ? Icons.area_chart : Icons.pie_chart,
+                      widget.charts[curChart].icon,
                       color: theme.colorTheme.primaryColor,
                     ),
                     const SizedBox(
                       width: 8,
                     ),
                     Text(
-                      cartesiano ? 'Cartesiano' : 'Torta',
-                      style: theme.textTheme.title3(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              right: 0,
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    filtroAno = !filtroAno;
-                  });
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      filtroAno
-                          ? Icons.calendar_view_month
-                          : Icons.calendar_month,
-                      color: theme.colorTheme.primaryColor,
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      filtroAno ? 'Total do Ano' : 'Mês Atual',
+                      widget.charts[curChart].nome,
                       style: theme.textTheme.title3(),
                     ),
                   ],
@@ -130,30 +109,12 @@ class _ChartContasState extends State<ChartContas> {
       ),
     );
 
-    final series = filtroAno ? widget.seriesAno : widget.seriesMes;
-
     return ChartContainer(
-      width: widget.width,
-      height: widget.height,
-      title: title,
-      child: Row(
-        children: [
-          Expanded(
-            child: cartesiano
-                ? CartesianChart(
-                    dataSeries: series,
-                    tooltipBehavior: _tooltipBehavior,
-                    trackballBehavior: _trackballBehavior,
-                    formatador: filtroAno ? 'MMMM' : 'dd/MM',
-                  )
-                : _CircularChart(
-                    dataSeries: series,
-                    tooltipBehavior: _tooltipBehavior,
-                  ),
-          ),
-        ],
-      ),
-    );
+        width: widget.width,
+        height: widget.height,
+        title: title,
+        expanded: widget.expanded,
+        child: widget.charts[curChart].chart);
   }
 }
 
@@ -167,7 +128,7 @@ class CartesianChart extends StatelessWidget {
     required this.formatador,
   }) : super(key: key);
 
-  final List<DataSeries<DateTime>> dataSeries;
+  final List<DataSeries<int>> dataSeries;
   final double? interval;
   final TooltipBehavior? tooltipBehavior;
   final TrackballBehavior? trackballBehavior;
@@ -187,10 +148,9 @@ class CartesianChart extends StatelessWidget {
       legend: Legend(isVisible: true, position: LegendPosition.bottom),
       series: <ChartSeries>[
         for (int i = 0; i < dataSeries.length; i++)
-          StackedColumnSeries<ChartData<DateTime>, String>(
+          StackedColumnSeries<ChartData<int>, String>(
             dataSource: dataSeries[i].series,
-            xValueMapper: (ChartData<DateTime> data, _) =>
-                DateFormat(formatador).format(data.x),
+            xValueMapper: (ChartData<int> data, _) => data.x.toString(),
             yValueMapper: (ChartData data, _) => data.y,
             legendItemText: dataSeries[i].title,
             emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.zero),

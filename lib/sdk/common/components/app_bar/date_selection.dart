@@ -37,6 +37,7 @@ class _AppBarMonthSelectionState extends State<AppBarMonthSelection> {
     return Padding(
       padding: const EdgeInsets.only(right: 50),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'Ano',
@@ -103,6 +104,21 @@ class _AppBarMonthSelectionState extends State<AppBarMonthSelection> {
               widget.onChange(selectedDate);
             },
           ),
+          if (Scaffold.of(context).hasEndDrawer)
+            Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                InkWell(
+                  child: const Padding(
+                    child: Icon(Icons.menu_rounded),
+                    padding: EdgeInsets.all(10),
+                  ),
+                  onTap: () => Scaffold.of(context).openEndDrawer(),
+                ),
+              ],
+            )
         ],
       ),
     );

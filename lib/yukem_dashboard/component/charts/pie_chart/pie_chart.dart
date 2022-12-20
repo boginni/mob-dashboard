@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../screens/dashboard/vendas/moddels/chart_data.dart';
+import '../../../models/data_ojects/chart_data.dart';
 
 class PieChart extends StatelessWidget {
   const PieChart(

@@ -2,6 +2,8 @@ abstract class ServerRoutes {
 
 
   static const util_produto_list = '/dash/web/util/produto/list';
+  static const util_vendedor_list = '/dash/web/util/vendedor/list';
+  static const util_vendedor_set = '/dash/web/util/vendedor/set';
 
 
   static const meta_vendedor_list = '/dash/web/meta/gerenciar/vendedor/list';

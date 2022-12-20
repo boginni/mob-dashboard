@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../component/chart_container.dart';
 import '../moddels/abc_produto.dart';
-import '../moddels/chart_data.dart';
+import '../../../../models/data_ojects/chart_data.dart';
 
 class ChartABCProdutos extends StatefulWidget {
   const ChartABCProdutos(
