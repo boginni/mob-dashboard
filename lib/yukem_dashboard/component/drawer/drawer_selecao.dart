@@ -25,7 +25,6 @@ class DrawerSelecaoVendedor extends StatefulWidget {
 }
 
 class _DrawerSelecaoVendedorState extends State<DrawerSelecaoVendedor> {
-
   Timer? t;
 
   @override
@@ -36,32 +35,28 @@ class _DrawerSelecaoVendedorState extends State<DrawerSelecaoVendedor> {
     }
   }
 
-
-
-
-  onUpdate(){
+  onUpdate() {
     if (t != null && t!.isActive) {
       t!.cancel();
     }
 
     setState(() {
-      t = Timer(const Duration(milliseconds: 1200), () {
-        Vendedor.updateFilter(context, vendedores: widget.itens).then((value){
+      t = Timer(const Duration(milliseconds: 150), () {
+        Vendedor.updateFilter(context, vendedores: widget.itens).then((value) {
           widget.onChanged();
         });
       });
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: widget.onLoading
-          ? ContainerLoading()
+          ? const ContainerLoading()
           : SelecaoItens(
               itens: widget.itens,
-              onChanged: (){
+              onChanged: () {
                 onUpdate();
               },
             ),
@@ -86,51 +81,76 @@ class SelecaoItens extends StatefulWidget {
 class _SelecaoItensState extends State<SelecaoItens> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 24, top: 12),
-            child: Column(
-              children: [
-                Text(
-                  'Filtrar Vendedores',
-                  style: AppTheme.of(context).textTheme.title(),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-              ],
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 24, top: 12),
+          child: Column(
+            children: [
+              Text(
+                'Filtrar Vendedores',
+                style: AppTheme.of(context).textTheme.title(),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  widget.itens.forEach((element) {
+                    element.selecionado = true;
+                  });
+                });
+                widget.onChanged();
+              },
+              child: Text('Selecionar Tudo'),
             ),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: widget.itens.length,
-            itemBuilder: (BuildContext context, int index) {
-              final item = widget.itens[index];
-              return Row(
-                children: [
-                  Checkbox(
-                    value: item.selecionado,
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          item.selecionado = value;
-                          widget.onChanged();
-                        });
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Flexible(child: Text(item.nome))
-                ],
-              );
-            },
-          ),
-        ],
-      ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  widget.itens.forEach((element) {
+                    element.selecionado = !element.selecionado;
+                  });
+                });
+                widget.onChanged();
+              },
+              child: Text('Inverter Seleção'),
+            ),
+          ],
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: widget.itens.length,
+          itemBuilder: (BuildContext context, int index) {
+            final item = widget.itens[index];
+
+            return Row(
+              children: [
+                Checkbox(
+                  value: item.selecionado,
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        item.selecionado = value;
+                        widget.onChanged();
+                      });
+                    }
+                  },
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Flexible(child: Text('(${item.id}) ${item.nome}'))
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 }

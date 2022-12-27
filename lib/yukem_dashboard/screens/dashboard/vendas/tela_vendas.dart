@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:yukem_dashboard/yukem_dashboard/component/chart_container.dart';
 import 'package:yukem_dashboard/yukem_dashboard/component/charts/cartesian/bar_chart.dart';
 import 'package:yukem_dashboard/yukem_dashboard/component/charts/pie_chart/pie_chart.dart';
+import 'package:yukem_dashboard/yukem_dashboard/models/connection/server_routes.dart';
+import 'package:yukem_dashboard/yukem_dashboard/models/connection/super_query.dart';
+import 'package:yukem_dashboard/yukem_dashboard/models/data_ojects/chart_data.dart';
 import 'package:yukem_dashboard/yukem_dashboard/models/data_ojects/util/vendedor.dart';
-import 'package:yukem_dashboard/yukem_dashboard/models/sample/sample_data.dart';
 
 import '../../../../sdk/common/components/app_bar/date_selection.dart';
 import '../../../../sdk/models/configuracao/app_theme.dart';
@@ -22,17 +24,37 @@ class _TelaVendasState extends State<TelaVendas> {
   List<Vendedor> vendedores = [];
   bool onLoading = true;
 
+  Map<String, DataSeries> series = {};
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      Vendedor.getDataFilter(context).then((value) {
-        setState(() {
-          onLoading = false;
-          vendedores = value;
-        });
+      vendedores = await Vendedor.getDataFilter(context);
+      getData();
+    });
+  }
+
+  getData() async {
+    SuperQuery.simpleData(
+      context,
+      ServerRoutes.comercial_page,
+      dataIni: DateTime.now(),
+      dataFim: DateTime.now(),
+    ).then((value) {
+      setState(() {
+        onLoading = false;
+        series = value;
       });
     });
+  }
+
+  List<ChartData> getSeries(DataSeries? dataSeries) {
+    if (dataSeries == null) {
+      return [];
+    }
+
+    return dataSeries.series;
   }
 
   @override
@@ -69,12 +91,12 @@ class _TelaVendasState extends State<TelaVendas> {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding:
-                            const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                8, 0, 8, 0),
                             child: FormDatePicker(
                               firstDate: DateTime(2000, 1, 1),
                               initialDate:
-                              DateTime.now().add(const Duration(days: -30)),
+                                  DateTime.now().add(const Duration(days: -30)),
                               lastDate: DateTime(2100, 1, 1),
                               then: (DateTime? date) {
                                 if (date != null) {}
@@ -88,12 +110,12 @@ class _TelaVendasState extends State<TelaVendas> {
                         ),
                         Expanded(
                           child: Padding(
-                            padding:
-                            const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                8, 0, 8, 0),
                             child: FormDatePicker(
                               firstDate: DateTime(2000, 1, 1),
                               initialDate:
-                              DateTime.now().add(const Duration(days: -30)),
+                                  DateTime.now().add(const Duration(days: -30)),
                               lastDate: DateTime(2100, 1, 1),
                               then: (DateTime? date) {
                                 if (date != null) {}
@@ -136,7 +158,8 @@ class _TelaVendasState extends State<TelaVendas> {
                   ChartContainer(
                     title: const ChartContainerTitle('Origem'),
                     child: PieChart(
-                      dataSeries: SampleData.RandomPie(qtd: 2),
+                      outerLegend: false,
+                      dataSeries: getSeries(series['pedido_origem']),
                     ),
                   ),
                 ],
@@ -153,7 +176,7 @@ class _TelaVendasState extends State<TelaVendas> {
                         child: ChartContainer(
                           title: const ChartContainerTitle('Tipos de Cliente'),
                           child: PieChart(
-                            dataSeries: SampleData.RandomPie(qtd: 2),
+                            dataSeries: getSeries(series['cliente_tipo']),
                           ),
                         ),
                       ),
@@ -161,7 +184,8 @@ class _TelaVendasState extends State<TelaVendas> {
                         child: ChartContainer(
                           title: const ChartContainerTitle('Departamento'),
                           child: PieChart(
-                            dataSeries: SampleData.RandomPie(qtd: 2),
+                            dataSeries:
+                                getSeries(series['produto_departamento']),
                           ),
                         ),
                       ),
@@ -169,23 +193,23 @@ class _TelaVendasState extends State<TelaVendas> {
                   ),
                   Row(
                     children: [
-
                       ChartContainer(
-                        title: ChartContainerTitle('Vendedores'),
+                        title: const ChartContainerTitle('Vendedores'),
                         width: 400,
                         height: 600,
                         expanded: true,
                         child: ChartBarRows(
-                          dataSeries: SampleData.RandomSeriesInt(''),
+                          dataSeries:
+                              series['ranking_vendedor'] ?? DataSeries('', []),
                         ),
                       ),
                       ChartContainer(
-                        title: ChartContainerTitle('Clientes'),
+                        title: const ChartContainerTitle('Clientes'),
                         width: 400,
                         height: 600,
                         expanded: true,
                         child: ChartBarRows(
-                          dataSeries: SampleData.RandomSeriesInt(''),
+                          dataSeries: series['ranking_cliente'] ?? DataSeries('', []),
                         ),
                       ),
                     ],

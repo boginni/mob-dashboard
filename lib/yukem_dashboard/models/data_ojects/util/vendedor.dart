@@ -31,8 +31,6 @@ class Vendedor extends Item {
 
     final List<Vendedor> itens = [];
 
-    print(rows);
-
     for (final item in rows) {
       itens.add(Vendedor.utilList(item));
     }

@@ -25,5 +25,6 @@ abstract class ServerRoutes {
 
 
   static const main_tela = '/dash/web/main/list';
+  static const comercial_page = '/dash/web/comercial/page';
 
 }
